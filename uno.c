@@ -46,7 +46,11 @@ int verifierValeur(TCarte,TCarte); 	// Vérifie si les valeurs des deux cartes e
 
 int main()
 {
-	printf("HELLO");
+	printf("===========================================")
+    printf("=====    Prêt pour une nouvelle     =======")
+    printf("=====           de UNO !            =======")
+    printf("===========================================")
+
 	return 0;
 }
 
