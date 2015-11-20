@@ -57,6 +57,7 @@ int main()
 	int choixMenu;	// Variable de choix du menu.
 	int end = 0;	// Variable utilisée pour mettre fin au programme dans la boucle principale.
 	TJoueur* jtour; // Pointeur indiquant le joueur devant jouer une carte ou piocher.
+	//int nbParties = 0;
 	 
 	// Initialisation
 	TJoueur j1;
@@ -65,7 +66,7 @@ int main()
 	initJoueur(&j1);
 	initJoueur(&j2);
 	initJoueur(&j3);
-	jtour = &j1; // On positionne le pointeur du tour sur le premier joueur.
+	//jtour = &j1; // On positionne le pointeur du tour sur le premier joueur.
 	
 	printf("================================================================\n");
     printf("===============      Prêt pour une nouvelle     ================\n");
@@ -83,8 +84,18 @@ int main()
 		printf(" 0 - Quiter\n");
 		printf("----------------------------------------------------------------\n\n");
 		
-		scanf("%d", &choixMenu);
+		/*if (strcmp(j1.nom," ")==0){
+			do {
+				scanf("%d", &choixMenu);
+			} while ((choixMenu<0) && (choixMenu>1));
+		} else {
+			do {
+				scanf("%d", &choixMenu);
+			} while ((choixMenu<0) && (choixMenu>2));
+		}*/
+		
 		modifierNomJoueur(&j1);
+		
 	}
 	return 0;
 }
