@@ -46,9 +46,13 @@ int verifierValeur(TCarte,TCarte); 	// Vérifie si les valeurs des deux cartes e
 void modifierNomJoueur(TJoueur* joueur); // Permet de changer le nom du joueur en paramètre.
 void afficherNomJ(TJoueur joueur); // affiche le nom du joueur en paramètre.
 void initJoueur(TJoueur* joueur); // Initialise le joueur.
-int affichageMenu(TJoueur joueur1);	// Affiche le menu principal et demande l'action à executer.
+int affichageMenu(TJoueur joueur);	// Affiche le menu principal et demande l'action à executer.
 									// Retoune le choix de l'action à exectuer sous forme d'entier.
 									// joueur1 en paramère est utilisé pour savoir si il sagit de la première partie ou non.
+int nouvellePartie(TJoueur joueur)	// Retourne 1 si les noms des joueurs ne sont pas définit,
+									// signifiant qu'aucune partie n'a été déjà jouée.
+									// Le paramètre utilise le nom du joueur.
+
 
 // ********************
 // Programme principal
@@ -79,12 +83,17 @@ int main()
     printf("===============          partie de UNO !        ================\n");
     printf("================================================================\n\n");
     
-    while (end != 1) {
+    while (choixMenu != 0) {
 		choixMenu = affichageMenu(j1);
-		
-		
-		
-		
+
+		if (choixMenu == 1) {
+			if (nouvellePartie(j1)==1){
+				modifierNomJoueur(j1);
+				modifierNomJoueur(j2);
+				modifierNomJoueur(j3);
+
+			}
+		}		
 	}
 	return 0;
 }
@@ -137,19 +146,19 @@ void initJoueur(TJoueur* joueur){
 	strcpy(joueur->nom,"ok");
 }
 	
-int affichageMenu(TJoueur joueur1, TJoueur joueur2, TJoueur joueur3) {
+int affichageMenu(TJoueur joueur) {
 	int choixMenu;
 	printf("----------------------------------------------------------------\n");
 	printf("---------------         Menu principal          ----------------\n");
 	printf("----------------------------------------------------------------\n");
 	printf(" 1 - Nouvelle partie \n");
-	if (strcmp(j1.nom," ")!=0) {  // Si une partie a déjà été jouée, les joueurs ont déjà été déclarés.
+	if (nouvellePartie(joueur)==1) {  // Si une partie a déjà été jouée, les joueurs ont déjà été déclarés.
 		printf(" 2 - Changer les noms des joueurs\n");
 	}
 	printf(" 0 - Quitter\n");
 	printf("----------------------------------------------------------------\n\n");
 	
-	if (strcmp(j1.nom," ")==0){
+	if (nouvellePartie(joueur)==1){
 		do {
 			scanf("%d", &choixMenu);
 		} while ((choixMenu<0) || (choixMenu>1));
@@ -162,7 +171,13 @@ int affichageMenu(TJoueur joueur1, TJoueur joueur2, TJoueur joueur3) {
 	return choixMenu;
 }
 	
-	
+int nouvellePartie(TJoueur joueur){
+	if (strcmp(joueur.nom," ")==0){
+		return 1;
+	} else {
+		return 0;
+	}
+}
 	
 	
 	
