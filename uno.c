@@ -66,6 +66,9 @@ int main()
 	initJoueur(&j1);
 	initJoueur(&j2);
 	initJoueur(&j3);
+	j1.noJ = 1;
+	j2.noJ = 2;
+	j3.noJ = 3;
 	//jtour = &j1; // On positionne le pointeur du tour sur le premier joueur.
 	
 	printf("================================================================\n");
@@ -81,20 +84,20 @@ int main()
 		if (strcmp(j1.nom," ")!=0) {  // Si une partie a déjà été jouée
 			printf(" 2 - Changer les noms des joueurs\n");
 		}
-		printf(" 0 - Quiter\n");
+		printf(" 0 - Quitter\n");
 		printf("----------------------------------------------------------------\n\n");
 		
-		/*if (strcmp(j1.nom," ")==0){
+		if (strcmp(j1.nom," ")==0){
 			do {
 				scanf("%d", &choixMenu);
-			} while ((choixMenu<0) && (choixMenu>1));
+			} while ((choixMenu<0) || (choixMenu>1));
 		} else {
 			do {
 				scanf("%d", &choixMenu);
-			} while ((choixMenu<0) && (choixMenu>2));
-		}*/
+			} while ((choixMenu<0) || (choixMenu>2));
+		}
 		
-		modifierNomJoueur(&j1);
+		
 		
 	}
 	return 0;
@@ -145,7 +148,7 @@ void initJoueur(TJoueur* joueur){
 	joueur->jsuivant = NULL;
 	joueur->nbCartes = 0;
 	joueur->noJ = 0;
-	strcpy(joueur->nom," ");
+	strcpy(joueur->nom,"ok");
 }
 	
 	
