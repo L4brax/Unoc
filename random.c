@@ -30,9 +30,10 @@ void afficherListe();
 int main(){
 	initialiserJeu();
 	afficherListe();
-	int a = 8/9;
-	printf("%d",a);
-
+	char string[56] = "";
+	int a = 5;
+	sprintf(string, "%d",a);
+	
 	return 0;
 }
 
@@ -84,9 +85,21 @@ void afficherListe(){
 	nbLignes = taille/8;
 	reste = taille%8;
 
-	int i;
-	int y;
+	int i=0;
+	int y=0;
+	char string[56] = "";
+	char stringtemp[7] = "";
+	char valeur
+	aux = jeu;
 	for (i=0;i<nbLignes;i++){
-		for (y=0)
+		printf("   ----   ----   ----   ----   ----   ----   ----   ----\n");
+		for (y=0;y<8;y++){
+			stringtemp = " %d:|",((i*8)+y));
+			if (aux->carte.type==1){
+				stringtemp = strcat(stringtemp,)
+			}
+			string = strcat(string,stringtemp);
+		}
+		
 	}
 }*/
