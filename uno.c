@@ -9,7 +9,7 @@
 typedef struct _TCarte
 {
 	int valeur; // Numéro et valeur de la carte
-	char couleur; // Couleur de la carte : R B J V S
+	char couleur[2]; // Couleur de la carte : R B J V S
 	int type; // Type de la carte (Base, +2, +4...)
 } TCarte;
 
@@ -55,12 +55,14 @@ int affichageMenu(TJoueur joueur, int nbManches);	// Affiche le menu principal e
 int nouveauJeu(TJoueur joueur);	// Retourne 1 si les noms des joueurs ne sont pas définit,
 									// signifiant qu'aucune partie n'a été déjà jouée.
 									// Le paramètre utilise le nom d'un joueur, en général le premier.
-void jouerTour(TJoueur* joueur);
+void jouerTour(TJoueur* joueur); 	// Procédures permettant au joueur de jouer son tour, c'est à dire jouer une carte,
+									// appliquer ses effets ou piocher une carte.
 void afficherUno();				// Affiche UNO pour indiquer que le joueur en Cours à gagné.
 void compterPoints(TJoueur* joueur); 	// Compte les points de la main du joueur en paramètre et les ajoutes sont total de points.
 										// Affiche aussi les points de la manche et de la partie en cours.
 void afficherResultat(TJoueur joueur); // Affiche le résultat des points du joueur en paramètre pour cette manche et pour la partie.
 void afficherVainqueur(TJoueur joueur1, TJoueur joueur2, TJoueur joueur3);  // Affiche le vainqueur 
+int saisirEntre(int a, int b); 	// Demande un entier à un utilisateur entre a et b et le retourne.
 
 
 
@@ -163,6 +165,7 @@ void modifierNomJoueur(TJoueur* joueur){
 		strcpy(numJoueur, "troisieme");
 	}
 	do {
+		
 		printf("Veuillez indiquer le nom du %s joueur : ",numJoueur);
 		scanf("%s", nomTemp);
 		if (strcmp(nomTemp," ")==0){
@@ -201,17 +204,11 @@ int affichageMenu(TJoueur joueur, int nbManches) {
 	printf("----------------------------------------------------------------\n");
 	
 	if (nouveauJeu(joueur)==1){
-		do {
-			scanf("%d", &choixMenu);
-		} while ((choixMenu<0) || (choixMenu>1));
+		choixMenu = saisirEntre(0,1);
 	} else if (nbManches>0){
-		do {
-			scanf("%d", &choixMenu);
-		} while ((choixMenu<0) || (choixMenu>3));
+		choixMenu = saisirEntre(0,3);
 	} else {
-		do {
-			scanf("%d", &choixMenu);
-		} while ((choixMenu<0) || (choixMenu>2));
+		choixMenu = saisirEntre(0,2);
 	}
 
 	return choixMenu;
@@ -223,6 +220,14 @@ int nouveauJeu(TJoueur joueur){
 	} else {
 		return 0;
 	}
+}
+
+int saisirEntre(int a, int b){
+	int ret;
+	do {
+		scanf("%d", &ret);
+	} while ((ret<a) || (ret>b));
+	return ret;
 }
 
 void jouerTour(TJoueur* joueur){
@@ -240,3 +245,6 @@ void compterPoints(TJoueur* joueur) {
 void afficherVainqueur(TJoueur joueur1, TJoueur joueur2, TJoueur joueur3){
 
 }
+
+
+
