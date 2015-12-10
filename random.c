@@ -30,6 +30,8 @@ void afficherListe();
 int main(){
 	initialiserJeu();
 	afficherListe();
+	int a = 8/9;
+	printf("%d",a);
 
 	return 0;
 }
@@ -67,3 +69,24 @@ void afficherListe(){
 		aux=aux->suivant;
 	}
 }
+
+/*void afficherSuperListe(){
+	TCelluleCarte* aux = jeu;
+	int tailleFile = 0;
+	int nbLignes = 0;
+	int reste = 0;
+	
+	while (aux != NULL) {
+		tailleFile =+ 1;
+		aux=aux->suivant;
+	}
+
+	nbLignes = taille/8;
+	reste = taille%8;
+
+	int i;
+	int y;
+	for (i=0;i<nbLignes;i++){
+		for (y=0)
+	}
+}*/
