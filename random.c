@@ -113,7 +113,7 @@ void afficherSuperListe(){
 
 		strcpy(string,"");
 		aux = jeu;
-		for (y=0;y<i*8;y++){
+		for (y=1;y<i*8+1;y++){
 			aux=aux->suivant;
 		}
 
@@ -131,11 +131,17 @@ void afficherSuperListe(){
 			}
 			aux = aux->suivant;
 		}
+
 		printf("%s\n",string);
 		printf("   ----   ----   ----   ----   ----   ----   ----   ----\n\n");
+		strcpy(string,"");
+		aux = jeu;
+		for (y=0;y<i*8;y++){
+			aux=aux->suivant;
+		}
 	}
 
-	char string1[56];
+	/*char string1[56];
 	char string2[56];
 	char string3[56];
 	char string4[56];
@@ -173,5 +179,5 @@ void afficherSuperListe(){
 	printf("%s\n",string1);
 	printf("%s\n",string2);
 	printf("%s\n",string3);
-	printf("%s\n\n",string4);
+	printf("%s\n\n",string4);*/
 }
