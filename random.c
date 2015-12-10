@@ -30,10 +30,6 @@ void afficherListe();
 int main(){
 	initialiserJeu();
 	afficherListe();
-	char string[56] = "98";
-	int a = 5;
-	sprintf(string, "%d",a);
-	printf("   %s",string);
 	
 	return 0;
 }
@@ -72,25 +68,25 @@ void afficherListe(){
 	}
 }
 
-/*void afficherSuperListe(){
+void afficherSuperListe(){
 	TCelluleCarte* aux = jeu;
 	int tailleFile = 0;
 	int nbLignes = 0;
-	int reste = 0;
 	
 	while (aux != NULL) {
 		tailleFile =+ 1;
 		aux=aux->suivant;
 	}
 
-	nbLignes = taille/8;
-	reste = taille%8;
+	nbLignes = tailleFile/8;
 
 	int i=0;
 	int y=0;
-	char string[56] = "";
-	char stringtemp[7] = "";
-	char valeur
+	char string[56];
+	char stringtemp[7];
+	strcpy(string,"");
+	strcpy(stringtemp,"");
+
 	aux = jeu;
 	for (i=0;i<nbLignes;i++){
 		printf("   ----   ----   ----   ----   ----   ----   ----   ----\n");
@@ -110,32 +106,32 @@ void afficherListe(){
 			} else {
 				sprintf(stringtemp, " %d:|00|",i*8+y);
 			}
-			string = strcat(string,stringtemp);
+			strcat(string,stringtemp);
 			aux = aux->suivant;
 		}
 		printf("%s\n",string);
 
-		string="";
+		strcpy(string,"");
 		aux = jeu;
 		for (y=0;y<i*8;y++){
 			aux=aux->suivant;
 		}
 
 		for (y=0;y<8;y++){
-			if (aux->carte.couleur=="Ro"){
-				string = strcat(string,"   |Ro|");
-			} else if (aux->carte.couleur=="Bl"){
-				string = strcat(string,"   |Bl|");
-			} else if (aux->carte.couleur=="Ve"){
-				string = strcat(string,"   |Ve|");
-			} else if (aux->carte.couleur=="Ja"){
-				string = strcat(string,"   |Ja|");
+			if (strcmp(aux->carte.couleur,"Ro")==0){
+				strcat(string,"   |Ro|");
+			} else if (strcmp(aux->carte.couleur,"Bl")==0){
+				strcat(string,"   |Bl|");
+			} else if (strcmp(aux->carte.couleur,"Ve")==0){
+				strcat(string,"   |Ve|");
+			} else if (strcmp(aux->carte.couleur,"Ja")==0){
+				strcat(string,"   |Ja|");
 			} else {
-				string = strcat(string,"   |##|");
+				strcat(string,"   |##|");
 			}
 			aux = aux->suivant;
 		}
-		printf("%s\n");
+		printf("%s\n",string);
 		printf("   ----   ----   ----   ----   ----   ----   ----   ----\n\n");
 	}
 
@@ -144,22 +140,38 @@ void afficherListe(){
 	char string3[56];
 	char string4[56];
 	while (aux != NULL) {
-		string1 = strcat(string,"   ----");
+		strcat(string,"   ----");
 		if (aux->carte.type==1){
-				sprintf(stringtemp, " %d:|0%d|",i*8+y,aux->carte.valeur);
-			} else if (aux->carte.type==2){
-				sprintf(stringtemp, " %d:|+2|",i*8+y);
-			} else if (aux->carte.type==3){
-				sprintf(stringtemp, " %d:|<>|",i*8+y);
-			} else if (aux->carte.type==4){
-				sprintf(stringtemp, " %d:|=>|",i*8+y);
-			} else if (aux->carte.type==5){
-				sprintf(stringtemp, " %d:|**|",i*8+y);
-			} else if (aux->carte.type==6){
-				sprintf(stringtemp, " %d:|+4|",i*8+y);
-			} else {
-				sprintf(stringtemp, " %d:|00|",i*8+y);
-			}
-			string = strcat(string,stringtemp);
+			sprintf(stringtemp, " %d:|0%d|",i*8+y,aux->carte.valeur);
+		} else if (aux->carte.type==2){
+			sprintf(stringtemp, " %d:|+2|",i*8+y);
+		} else if (aux->carte.type==3){
+			sprintf(stringtemp, " %d:|<>|",i*8+y);
+		} else if (aux->carte.type==4){
+			sprintf(stringtemp, " %d:|=>|",i*8+y);
+		} else if (aux->carte.type==5){
+			sprintf(stringtemp, " %d:|**|",i*8+y);
+		} else if (aux->carte.type==6){
+			sprintf(stringtemp, " %d:|+4|",i*8+y);
+		} else {
+			sprintf(stringtemp, " %d:|00|",i*8+y);
+		}
+		strcat(string2,stringtemp);
+		if (strcmp(aux->carte.couleur,"Ro")==0){
+			strcat(string3,"   |Ro|");
+		} else if (strcmp(aux->carte.couleur,"Bl")==0){
+			 strcat(string3,"   |Bl|");
+		} else if (strcmp(aux->carte.couleur,"Ve")==0){
+			strcat(string3,"   |Ve|");
+		} else if (strcmp(aux->carte.couleur,"Ja")==0){
+			strcat(string3,"   |Ja|");
+		} else {
+			strcat(string3,"   |##|");
+		}
+		strcat(string,"   ----");
 	}
-}*/
+	printf("%s\n",string1);
+	printf("%s\n",string2);
+	printf("%s\n",string3);
+	printf("%s\n\n",string4);
+}
