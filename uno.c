@@ -9,9 +9,17 @@
 typedef struct _TCarte
 {
 	int valeur; // Numéro et valeur de la carte
-	char couleur[2]; // Couleur de la carte : R B J V S
+	char couleur[2]; // Couleur de la carte : Ro Bl Ja Ve Sa
 	int type; // Type de la carte (Base, +2, +4...)
 } TCarte;
+//Concernant les types :
+//  0 = carte 0
+//  1 = carte à valeur
+//  2 = carte +2
+//	3 = changement de sens
+//  4 = passe tour
+//  5 = joker couleur
+//	6 = carte +4
 
 //Structure stockant une carte et un pointeur vers une autre carte.
 typedef struct _TCelluleCarte

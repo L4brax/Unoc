@@ -30,7 +30,7 @@ void afficherListe();
 int main(){
 	initialiserJeu();
 	afficherListe();
-	char string[56] = "";
+	char string[56] = "98";
 	int a = 5;
 	sprintf(string, "%d",a);
 	printf("   %s",string);
@@ -95,12 +95,71 @@ void afficherListe(){
 	for (i=0;i<nbLignes;i++){
 		printf("   ----   ----   ----   ----   ----   ----   ----   ----\n");
 		for (y=0;y<8;y++){
-			stringtemp = " %d:|",((i*8)+y));
 			if (aux->carte.type==1){
-				stringtemp = strcat(stringtemp,)
+				sprintf(stringtemp, " %d:|0%d|",i*8+y,aux->carte.valeur);
+			} else if (aux->carte.type==2){
+				sprintf(stringtemp, " %d:|+2|",i*8+y);
+			} else if (aux->carte.type==3){
+				sprintf(stringtemp, " %d:|<>|",i*8+y);
+			} else if (aux->carte.type==4){
+				sprintf(stringtemp, " %d:|=>|",i*8+y);
+			} else if (aux->carte.type==5){
+				sprintf(stringtemp, " %d:|**|",i*8+y);
+			} else if (aux->carte.type==6){
+				sprintf(stringtemp, " %d:|+4|",i*8+y);
+			} else {
+				sprintf(stringtemp, " %d:|00|",i*8+y);
 			}
 			string = strcat(string,stringtemp);
+			aux = aux->suivant;
 		}
-		
+		printf("%s\n",string);
+
+		string="";
+		aux = jeu;
+		for (y=0;y<i*8;y++){
+			aux=aux->suivant;
+		}
+
+		for (y=0;y<8;y++){
+			if (aux->carte.couleur=="Ro"){
+				string = strcat(string,"   |Ro|");
+			} else if (aux->carte.couleur=="Bl"){
+				string = strcat(string,"   |Bl|");
+			} else if (aux->carte.couleur=="Ve"){
+				string = strcat(string,"   |Ve|");
+			} else if (aux->carte.couleur=="Ja"){
+				string = strcat(string,"   |Ja|");
+			} else {
+				string = strcat(string,"   |##|");
+			}
+			aux = aux->suivant;
+		}
+		printf("%s\n");
+		printf("   ----   ----   ----   ----   ----   ----   ----   ----\n\n");
+	}
+
+	char string1[56];
+	char string2[56];
+	char string3[56];
+	char string4[56];
+	while (aux != NULL) {
+		string1 = strcat(string,"   ----");
+		if (aux->carte.type==1){
+				sprintf(stringtemp, " %d:|0%d|",i*8+y,aux->carte.valeur);
+			} else if (aux->carte.type==2){
+				sprintf(stringtemp, " %d:|+2|",i*8+y);
+			} else if (aux->carte.type==3){
+				sprintf(stringtemp, " %d:|<>|",i*8+y);
+			} else if (aux->carte.type==4){
+				sprintf(stringtemp, " %d:|=>|",i*8+y);
+			} else if (aux->carte.type==5){
+				sprintf(stringtemp, " %d:|**|",i*8+y);
+			} else if (aux->carte.type==6){
+				sprintf(stringtemp, " %d:|+4|",i*8+y);
+			} else {
+				sprintf(stringtemp, " %d:|00|",i*8+y);
+			}
+			string = strcat(string,stringtemp);
 	}
 }*/
