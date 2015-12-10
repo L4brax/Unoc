@@ -33,6 +33,7 @@ int main(){
 	char string[56] = "";
 	int a = 5;
 	sprintf(string, "%d",a);
+	printf("   %s",string);
 	
 	return 0;
 }
