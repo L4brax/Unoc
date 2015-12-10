@@ -1,0 +1,69 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct _TCarte
+{
+	int valeur; // Numéro et valeur de la carte
+	char couleur[2]; // Couleur de la carte : R B J V S
+	int type; // Type de la carte (Base, +2, +4...)
+} TCarte;
+
+typedef struct _TCelluleCarte
+{
+	TCarte carte;
+	struct _TCelluleCarte* suivant;
+} TCelluleCarte;
+
+TCelluleCarte* pioche;
+TCelluleCarte* jeu;
+
+void initialiserJeu(); //Initialise toutes les cartes du jeu dans la pile Jeu non mélangées.
+void ajoutSerie(int a, int b, char couleur[2], int type, int nb); // Permet d'ajouter une série de cartes à la pile Jeu.
+						// Le paramètre a désigne la borne inférieur de l'itération de la valeur de la carte (a inclus)
+						// Le paramètre b désigne la borne supérieur de l'itération de la valeur de la carte (b exclus)
+						// Couleur désigne la couleur affectée aux cartes créées.
+						// Type désigne le type affecté aux cartes crées.
+						// nb désigne le nombre de séries à créer.
+void afficherListe();		
+
+int main(){
+	initialiserJeu();
+	afficherListe();
+
+	return 0;
+}
+
+void initialiserJeu(){
+	ajoutSerie(1,10,"Bl",1,2);
+}
+
+void ajoutSerie(int a, int b, char couleur[], int type, int nb){
+	int i;
+	int y;
+	for (y=0;y<nb;y++){
+		for (i=a;i<b;i++) {
+			TCelluleCarte* newC = (TCelluleCarte*) malloc(sizeof(TCelluleCarte));
+			newC->carte.valeur = i;
+			strcpy(newC->carte.couleur,couleur);
+			newC->carte.type = type;
+			newC->suivant = jeu;
+			jeu = newC;
+		}
+	}
+}
+
+void afficherListe(){
+	TCelluleCarte* aux = jeu;
+	//int i;
+	while (aux != NULL) {
+		if (aux->carte.type == 1){
+			printf("  ----  \n");
+			printf("  |0%d|  \n",aux->carte.valeur);
+			printf("  |%s|  \n",aux->carte.couleur);
+			printf("  ----  \n");
+			printf("\n");
+		}
+		aux=aux->suivant;
+	}
+}
