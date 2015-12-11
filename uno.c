@@ -60,9 +60,6 @@ int affichageMenu(int nbManches);	// Affiche le menu principal et demande l'acti
 									// Retoune le choix de l'action à exectuer sous forme d'entier.
 									// joueur1 en paramère est utilisé pour savoir si il sagit de la première partie ou non.
 									// nbManches en paramètre permet de savoir si une partie est en cours ou non.
-int nouveauJeu(TJoueur joueur);	// Retourne 1 si les noms des joueurs ne sont pas définit,
-									// signifiant qu'aucune partie n'a été déjà jouée.
-									// Le paramètre utilise le nom d'un joueur, en général le premier.
 void jouerTour(TJoueur* joueur); 	// Procédures permettant au joueur de jouer son tour, c'est à dire jouer une carte,
 									// appliquer ses effets ou piocher une carte.
 void afficherUno();				// Affiche UNO pour indiquer que le joueur en Cours à gagné.
@@ -78,10 +75,14 @@ void ajoutSerie(int a, int b, char couleur[2], int type, int nb); // Permet d'aj
 						// Couleur désigne la couleur affectée aux cartes créées.
 						// Type désigne le type affecté aux cartes crées.
 						// nb désigne le nombre de séries à créer.
-void afficherListe(*TCelluleCarte liste); 	//Affiche une liste de Carte.
+void afficherListe(TCelluleCarte* liste); 	//Affiche une liste de Carte.
 											//Prend en paramètre un pointeur vers une TCelluleCarte, en générale une main.
 											//Affiche plusieurs cartes sur une seule ligne.
 void melangerPioche(); //Mélange les cartes du jeu dans la pioche.
+void libererPioche(); //libère la pioche.
+void libererJeu(); //Libère le jeu.
+void libererMain(TJoueur* joueur); //Libere la main du joueur en paramètre.
+void tirerCarte(); //Place la carte en tête de pioche sur la tête du jeu.
 
 
 
@@ -118,7 +119,7 @@ int main()
     printf("================================================================\n\n");
     
     while (choixMenu != 0) {
-		choixMenu = affichageMenu(j1,nbManches);		
+		choixMenu = affichageMenu(nbManches);		
 		if ((choixMenu == 1) || (choixMenu == 2)){
 			jtour = &j1; // On positionne le pointeur du tour sur le premier joueur.
 			if (choixMenu == 1) {
@@ -129,18 +130,42 @@ int main()
 				modifierNomJoueur(&j3);
 				printf("----------------------------------------------------------------\n");
 			}
+			initialiserJeu();
+			melangerPioche();
+			tirerCarte();
 			while (finManche == 0) {
+				if (pioche == NULL) {
+					printf("----------------------------------------------------------------\n");
+					printf("   	La pioche est vide !\n");
+					printf("	Le jeu est mélangé, une nouvelle carte est tirée.\n");
+					printf("----------------------------------------------------------------\n");
+					melangerPioche();
+					tirerCarte();
+				}
 				printf("%s à vous de jouer !\n",jtour->nom);
 				jouerTour(jtour);
 				if (jtour->jmain == NULL) {
 					afficherUno();
 					finManche = 1;
+					printf("----------------------------------------------------------------\n");
 					compterPoints(&j1);
+					printf("\n");
 					compterPoints(&j2);
+					printf("\n");
 					compterPoints(&j3);
+					printf("----------------------------------------------------------------\n");
+					libererJeu();
+					libererPioche();
+					libererMain(&j1);
+					libererMain(&j2);
+					libererMain(&j3);
 					nbManches =+ 1;
 					if (nbManches == 3) {
 						afficherVainqueur(j1,j2,j3);
+						nbManches=0;
+						j1.nbPoints = 0;
+						j2.nbPoints = 0;
+						j3.nbPoints = 0;
 					}
 				}
 				jtour = jtour->jsuivant;
@@ -163,11 +188,19 @@ void piocherCarte(TJoueur* joueur){
 }
 
 int verifierCouleur(TCarte carteJoueur, TCarte carteJeu){
-	return 1;
+	if (strcmp(carteJoueur.couleur,carteJeu.couleur)==0){
+		return 1;
+	} else {
+		return 0;
+	}
 }
 	
 int verifierValeur(TCarte carteJoueur, TCarte carteJeu){
-	return 1;
+	if (carteJoueur.valeur==carteJeu.valeur){
+		return 1;
+	} else {
+		return 0;
+	}
 }
 	
 void modifierNomJoueur(TJoueur* joueur){
@@ -225,14 +258,6 @@ int affichageMenu(int nbManches) {
 	return choixMenu;
 }
 	
-int nouveauJeu(TJoueur joueur){
-	if (strcmp(joueur.nom," ")==0){
-		return 1;
-	} else {
-		return 0;
-	}
-}
-
 int saisirEntre(int a, int b){
 	int ret;
 	do {
@@ -242,7 +267,227 @@ int saisirEntre(int a, int b){
 }
 
 void jouerTour(TJoueur* joueur){
+	TCelluleCarte* aux = joueur->jmain;
+	TCelluleCarte* prec = joueur->jmain;
+	int choixMax;
+	int choixCarte;
+	int choixOk;
+	int choixCouleur;
+	char couleur[2];
+	int i;
 
+	// Affichage de la carte sur le jeu :
+	printf("                   .--.\n");
+	printf("La carte du jeu :  ");
+	if (jeu->carte.type==1){
+		printf("                   |0%d|\n",jeu->carte.valeur);
+	} else if (jeu->carte.type==2){
+		printf("                   |+2|\n");
+	} else if (jeu->carte.type==3){
+		printf("                   |<>|\n");
+	} else if (jeu->carte.type==4){
+		printf("                   |=>|\n");
+	} else if (jeu->carte.type==5){
+		printf("                   |**|\n");
+	} else if (jeu->carte.type==6){
+		printf("                   |+4|\n");
+	} else {
+		printf("                   |00|\n");
+	}
+	if (strcmp(jeu->carte.couleur,"Ro")==0){
+		printf("                   |Ro|\n");
+	} else if (strcmp(jeu->carte.couleur,"Bl")==0){
+		printf("                   |Bl|\n");
+	} else if (strcmp(jeu->carte.couleur,"Ve")==0){
+		printf("                   |Ve|\n");
+	} else if (strcmp(jeu->carte.couleur,"Ja")==0){
+		printf("                   |Ja|\n");
+	} else {
+		printf("                   |##|\n");
+	}
+	printf("                   *--*\n\n");
+
+	// Affichage de la main du joueur :
+	printf(" Votre main est la suivante :\n");
+	afficherListe(joueur->jmain);
+	// On compte le nombre de cartes en main du joueur :
+	while (aux != NULL) {
+		choixMax += 1;
+		aux=aux->suivant;
+	}
+
+	while (choixOk == 0) {
+		printf(" \n Choisissez une carte en indiquant son numéro\n");
+		printf("  (de gauche à droite en partant de 1)\n");
+		printf("  0 pour piocher.");
+
+		// Le joueur saisit la carte à jouer :
+		choixCarte = saisirEntre(0,choixMax);
+		if (choixCarte == 0) {
+			piocherCarte(joueur);
+			choixOk = 1;
+		} else {
+			// On place aux sur la carte choisie :
+			aux = joueur->jmain;
+			prec = joueur->jmain;
+			if (choixCarte>1){
+				for (i=0;i<choixCarte-1;i++){
+					prec = aux;
+					aux = aux->suivant;
+				}
+			}
+			// On vérifie si cette carte est jouable et applique l'effet:
+			// Cas d'une carte numérotée :
+			if (aux->carte.type==1){
+				if((verifierValeur(aux->carte,jeu->carte)==1)||(verifierCouleur(aux->carte,jeu->carte)==1)){
+					if (choixCarte==1){
+						joueur->jmain = aux->suivant;
+						aux->suivant = jeu;
+						jeu = aux;
+					} else {
+						prec->suivant = aux->suivant;
+						aux->suivant = jeu;
+						jeu = aux;
+					}
+					choixOk = 1;
+				}
+			// Cas d'un +2
+			} else if (aux->carte.type==2) {
+				if((jeu->carte.type==2)||(verifierCouleur(aux->carte,jeu->carte)==1)){
+					if (choixCarte==1){
+						joueur->jmain = aux->suivant;
+						aux->suivant = jeu;
+						jeu = aux;
+					} else {
+						prec->suivant = aux->suivant;
+						aux->suivant = jeu;
+						jeu = aux;
+					}
+					choixOk = 1;
+					printf("  C'est un +2 !\n");
+					piocherCarte(joueur->jsuivant);
+					piocherCarte(joueur->jsuivant);
+				}
+			// Cas d'un pass tour
+			} else if (aux->carte.type==4) {
+				if((jeu->carte.type==3)||(verifierCouleur(aux->carte,jeu->carte)==1)){
+					if (choixCarte==1){
+						joueur->jmain = aux->suivant;
+						aux->suivant = jeu;
+						jeu = aux;
+					} else {
+						prec->suivant = aux->suivant;
+						aux->suivant = jeu;
+						jeu = aux;
+					}
+					choixOk = 1;
+					printf("  C'est un pass tour !\n");
+					joueur = joueur->jsuivant;
+				}
+			// Cas d'un changement de sens
+			} else if (aux->carte.type==3) {
+				if((jeu->carte.type==3)||(verifierCouleur(aux->carte,jeu->carte)==1)){
+					if (choixCarte==1){
+						joueur->jmain = aux->suivant;
+						aux->suivant = jeu;
+						jeu = aux;
+					} else {
+						prec->suivant = aux->suivant;
+						aux->suivant = jeu;
+						jeu = aux;
+					}
+					choixOk = 1;
+					printf("  C'est un changement de sens !\n");
+					joueur->jsuivant->jsuivant->jsuivant=joueur->jsuivant;
+					joueur->jsuivant=joueur->jsuivant->jsuivant;
+					joueur->jsuivant->jsuivant->jsuivant=joueur;
+				}
+			// Cas d'un +4
+			} else if (aux->carte.type==6){
+				if (choixCarte==1){
+					joueur->jmain = aux->suivant;
+					aux->suivant = jeu;
+					jeu = aux;
+				} else {
+					prec->suivant = aux->suivant;
+					aux->suivant = jeu;
+					jeu = aux;
+				}
+				choixOk = 1;
+				printf("  C'est un +4 !\n");
+				piocherCarte(joueur->jsuivant);
+				piocherCarte(joueur->jsuivant);
+				piocherCarte(joueur->jsuivant);
+				piocherCarte(joueur->jsuivant);
+			// Cas d'un joker
+			} else if (aux->carte.type==5){
+				if (choixCarte==1){
+					joueur->jmain = aux->suivant;
+					aux->suivant = jeu;
+					jeu = aux;
+				} else {
+					prec->suivant = aux->suivant;
+					aux->suivant = jeu;
+					jeu = aux;
+				}
+				choixOk = 1;
+				printf("  C'est un JOKER !\n");
+				printf("  Veuillez choisir une couleur : \n");
+				printf("  1 - Rouge\n");
+				printf("  2 - Vert\n");
+				printf("  3 - Bleu\n");
+				printf("  4 - Jaune\n");
+				choixCouleur = saisirEntre(1,4);
+				if (choixCouleur == 1){
+					strcpy(couleur,"Ro");
+					printf("%s a choisi du Rouge !",joueur->nom);
+				} else if (choixCouleur == 2){
+					strcpy(couleur,"Ve");
+					printf("%s a choisi du Vert !",joueur->nom);
+				} else if (choixCouleur == 3){
+					strcpy(couleur,"Bl");
+					printf("%s a choisi du Bleu !",joueur->nom);
+				} else {
+					strcpy(couleur,"Ja");
+					printf("%s a choisi du Jaune !",joueur->nom);
+				}
+				strcpy(jeu->carte.couleur,couleur);
+			} else {
+				if((jeu->carte.type==0)||(verifierCouleur(aux->carte,jeu->carte)==1)){
+					if (choixCarte==1){
+						joueur->jmain = aux->suivant;
+						aux->suivant = jeu;
+						jeu = aux;
+					} else {
+						prec->suivant = aux->suivant;
+						aux->suivant = jeu;
+						jeu = aux;
+					}
+					choixOk = 1;
+					printf("  C'est un Zero !\n");
+					printf("  Vous pouvez échanger votre main, choisissez avec qui :\n");
+					printf("  1 - %s",joueur->jsuivant->nom);
+					printf("  2 - %s",joueur->jsuivant->jsuivant->nom);
+					choixCouleur = saisirEntre(1,2);
+					if (choixCouleur==1) {
+						aux = joueur->jmain;
+						joueur->jmain = joueur->jsuivant->jmain;
+						joueur->jsuivant->jmain = aux;
+					} else {
+						aux = joueur->jmain;
+						joueur->jmain = joueur->jsuivant->jsuivant->jmain;
+						joueur->jsuivant->jsuivant->jmain = aux;
+					}
+				}
+			}
+		}
+		if (choixOk==1){
+			printf("  Vous avez joué !\n");
+			printf("----------------------------------------------------------------\n");
+		} else {
+			printf("  La carte choisie n'est pas jouable !");
+		}
+	}
 }
 
 void afficherUno(){
@@ -252,19 +497,37 @@ void afficherUno(){
 	printf("===============     #    #  # # #  #   #     ===================\n");
 	printf("===============     #    #  #  ##  #   #     ===================\n");
 	printf("===============      ####   #   #   ###      ===================\n");
-	printf("================================================================\n");
+	printf("================================================================\n\n");
 
 }
 
 void compterPoints(TJoueur* joueur) {
-
+	TCelluleCarte* aux = joueur->jmain;
+	int pointsManche =0;
+	while (aux != NULL){
+		joueur->nbPoints += aux->carte.valeur;
+		aux = aux->suivant;
+		pointsManche += aux->carte.valeur;
+	}
+	printf("  %s, vous avez un score de %d sur cette manche.\n",joueur->nom,pointsManche);
+	printf("  Vous avez un score total de : %d points\n",joueur->nbPoints);
 }
 
 void afficherVainqueur(TJoueur joueur1, TJoueur joueur2, TJoueur joueur3){
-
+	printf("================================================================\n");
+	if (joueur1.nbPoints>joueur2.nbPoints){
+		if (joueur1.nbPoints>joueur3.nbPoints){
+			printf("  Bravo %s, vous remportez la partie !",joueur1.nom);
+		} else if (joueur3.nbPoints>joueur2.nbPoints) {
+			printf("  Bravo %s, vous remportez la partie !",joueur3.nom);
+		} else {
+			printf("  Bravo %s, vous remportez la partie !",joueur2.nom);
+		}
+	}
+	printf("================================================================\n");
 }
 
-void afficherListe(*TCelluleCarte liste){
+void afficherListe(TCelluleCarte* liste){
 	TCelluleCarte* aux = liste;
 	int tailleFile = 0;
 	int nbLignes = 0;
@@ -463,5 +726,39 @@ void ajoutSerie(int a, int b, char couleur[], int type, int nb){
 			newC->suivant = jeu;
 			jeu = newC;
 		}
+	}
+}
+
+void libererPioche(){
+	TCelluleCarte* aux = pioche;
+	while(aux != NULL){
+		pioche = pioche->suivant;
+		free(aux);
+		aux=pioche;
+	}
+}
+
+void libererJeu(){
+	TCelluleCarte* aux = jeu;
+	while(aux != NULL){
+		jeu = jeu->suivant;
+		free(aux);
+		aux=jeu;
+	}
+}
+
+void tirerCarte(){
+	TCelluleCarte* aux = pioche;
+	pioche = pioche->suivant;
+	aux->suivant = jeu;
+	jeu = aux;
+}
+
+void libererMain(TJoueur* joueur){
+	TCelluleCarte* aux = joueur->jmain;
+	while(aux != NULL){
+		joueur->jmain = joueur->jmain->suivant;
+		free(aux);
+		aux=joueur->jmain;
 	}
 }
