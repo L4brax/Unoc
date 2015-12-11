@@ -30,14 +30,20 @@ void afficherSuperListe();
 
 int main(){
 	initialiserJeu();
-	afficherSuperListe();
-	
+	//afficherSuperListe();
+	int i;
+	for (i=108;i>0;i--) {
+		printf("%d\n",i);
+	}
 	return 0;
 }
 
 void initialiserJeu(){
 	ajoutSerie(1,10,"Bl",1,1);
 	ajoutSerie(13,14,"Sa",6,9);
+	ajoutSerie(1,10,"Ja",1,1);
+	ajoutSerie(1,10,"Ve",1,1);
+	ajoutSerie(1,2,"Ve",3,8);
 }
 
 void ajoutSerie(int a, int b, char couleur[], int type, int nb){
