@@ -83,7 +83,7 @@ void libererPioche(); //libère la pioche.
 void libererJeu(); //Libère le jeu.
 void libererMain(TJoueur* joueur); //Libere la main du joueur en paramètre.
 void tirerCarte(); //Place la carte en tête de pioche sur la tête du jeu.
-
+void pioche7(TJoueur* joueur); //Pioche 7 cartes pour le joueur en paramètre.
 
 
 // ********************
@@ -133,6 +133,9 @@ int main()
 			initialiserJeu();
 			melangerPioche();
 			tirerCarte();
+			pioche7(&j1);
+			pioche7(&j2);
+			pioche7(&j3);
 			while (finManche == 0) {
 				if (pioche == NULL) {
 					printf("----------------------------------------------------------------\n");
@@ -280,19 +283,19 @@ void jouerTour(TJoueur* joueur){
 	printf("                   .--.\n");
 	printf("La carte du jeu :  ");
 	if (jeu->carte.type==1){
-		printf("                   |0%d|\n",jeu->carte.valeur);
+		printf("|0%d|\n",jeu->carte.valeur);
 	} else if (jeu->carte.type==2){
-		printf("                   |+2|\n");
+		printf("|+2|\n");
 	} else if (jeu->carte.type==3){
-		printf("                   |<>|\n");
+		printf("|<>|\n");
 	} else if (jeu->carte.type==4){
-		printf("                   |=>|\n");
+		printf("|=>|\n");
 	} else if (jeu->carte.type==5){
-		printf("                   |**|\n");
+		printf("|**|\n");
 	} else if (jeu->carte.type==6){
-		printf("                   |+4|\n");
+		printf("|+4|\n");
 	} else {
-		printf("                   |00|\n");
+		printf("|00|\n");
 	}
 	if (strcmp(jeu->carte.couleur,"Ro")==0){
 		printf("                   |Ro|\n");
@@ -760,5 +763,12 @@ void libererMain(TJoueur* joueur){
 		joueur->jmain = joueur->jmain->suivant;
 		free(aux);
 		aux=joueur->jmain;
+	}
+}
+
+void pioche7(TJoueur* joueur){
+	int i;
+	for (i=0;i<7;i++){
+		piocherCarte(joueur);
 	}
 }
