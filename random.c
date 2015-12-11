@@ -39,11 +39,32 @@ int main(){
 }
 
 void initialiserJeu(){
-	ajoutSerie(1,10,"Bl",1,1);
-	ajoutSerie(13,14,"Sa",6,9);
-	ajoutSerie(1,10,"Ja",1,1);
-	ajoutSerie(1,10,"Ve",1,1);
-	ajoutSerie(1,2,"Ve",3,8);
+	ajoutSerie(1,10,"Bl",1,2);
+	ajoutSerie(1,10,"Ro",1,2);
+	ajoutSerie(1,10,"Ja",1,2);
+	ajoutSerie(1,10,"Ve",1,2);
+
+	ajoutSerie(20,21,"Bl",2,2);
+	ajoutSerie(20,21,"Ro",2,2);
+	ajoutSerie(20,21,"Ja",2,2);
+	ajoutSerie(20,21,"Ve",2,2);
+
+	ajoutSerie(20,21,"Bl",3,2);
+	ajoutSerie(20,21,"Ro",3,2);
+	ajoutSerie(20,21,"Ja",3,2);
+	ajoutSerie(20,21,"Ve",3,2);
+
+	ajoutSerie(20,21,"Bl",4,2);
+	ajoutSerie(20,21,"Ro",4,2);
+	ajoutSerie(20,21,"Ja",4,2);
+	ajoutSerie(20,21,"Ve",4,2);
+
+	ajoutSerie(50,51,"Sa",5,4);
+	ajoutSerie(50,51,"Sa",6,4);
+	ajoutSerie(0,1,"Ve",0,1);
+	ajoutSerie(0,1,"Ve",0,1);
+	ajoutSerie(0,1,"Ve",0,1);
+	ajoutSerie(0,1,"Ve",0,1);
 }
 
 void ajoutSerie(int a, int b, char couleur[], int type, int nb){
@@ -128,7 +149,7 @@ void afficherSuperListe(){
 	
 		strcpy(string,"");
 		aux = jeu;
-		for (y=0;y<i*8;y++){
+		for (y=1;y<i*8+1;y++){
 			aux=aux->suivant;
 		}
 
@@ -148,7 +169,6 @@ void afficherSuperListe(){
 		}
 		printf("%s\n",string);
 		printf("  *--*  *--*  *--*  *--*  *--*  *--*  *--*  *--*\n");
-
 	}
 
 	char string1[56];
@@ -199,3 +219,37 @@ void afficherSuperListe(){
 		printf("%s\n\n",string4);
 	}
 }
+
+void melangerPioche(){
+	TCelluleCarte* aux = jeu;
+	TCelluleCarte* prec; 
+	int i =0;
+	int y =0;
+	int select;
+	int tailleFile = 0;
+
+	while (aux != NULL) {
+		tailleFile += 1;
+		aux=aux->suivant;
+	}
+
+	for (i=tailleFile;i>0;i--){
+		select = rand()%i;
+		aux=jeu;
+		prec=jeu;
+		if (select==0) {
+			jeu = aux->suivant;
+			aux->suivant=pioche;
+			pioche=aux;
+		} else {
+			for (y=0;y<select;y++){
+				prec=aux;
+				aux=aux->suivant;
+			}
+			prec->suivant = aux->suivant;
+			aux->suivant = pioche;
+			pioche = aux;
+		}
+	}
+}
+
