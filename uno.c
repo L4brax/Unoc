@@ -191,7 +191,7 @@ void piocherCarte(TJoueur* joueur){
 }
 
 int verifierCouleur(TCarte carteJoueur, TCarte carteJeu){
-	if (strcmp(carteJoueur.couleur,carteJeu.couleur)==0){
+	if ((strcmp(carteJoueur.couleur,carteJeu.couleur)==0)||(strcmp(carteJeu.couleur,"Sa")==0)){
 		return 1;
 	} else {
 		return 0;
@@ -274,7 +274,7 @@ void jouerTour(TJoueur* joueur){
 	TCelluleCarte* prec = joueur->jmain;
 	int choixMax;
 	int choixCarte;
-	int choixOk;
+	int choixOk = 0;
 	int choixCouleur;
 	char couleur[2];
 	int i;
