@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 typedef struct _TCarte
 {
@@ -26,12 +27,21 @@ void ajoutSerie(int a, int b, char couleur[2], int type, int nb); // Permet d'aj
 						// Type désigne le type affecté aux cartes crées.
 						// nb désigne le nombre de séries à créer.
 void afficherListe();
-void afficherSuperListe();		
+void afficherSuperListe();	
+void melangerPioche();
+void afficherSuperListePioche();
+
 
 int main(){
 	initialiserJeu();
 	afficherSuperListe();
-	
+	melangerPioche();
+	printf ("=================================\n");
+	printf ("=================================\n");
+	printf ("=================================\n");
+	printf ("=================================\n");
+	afficherSuperListe();
+	afficherSuperListePioche();
 	return 0;
 }
 
@@ -146,6 +156,129 @@ void afficherSuperListe(){
 	
 		strcpy(string,"");
 		aux = jeu;
+		for (y=1;y<i*8+1;y++){
+			aux=aux->suivant;
+		}
+
+		for (y=0;y<8;y++){
+			if (strcmp(aux->carte.couleur,"Ro")==0){
+				strcat(string,"  |Ro|");
+			} else if (strcmp(aux->carte.couleur,"Bl")==0){
+				strcat(string,"  |Bl|");
+			} else if (strcmp(aux->carte.couleur,"Ve")==0){
+				strcat(string,"  |Ve|");
+			} else if (strcmp(aux->carte.couleur,"Ja")==0){
+				strcat(string,"  |Ja|");
+			} else {
+				strcat(string,"  |##|");
+			}
+			aux = aux->suivant;
+		}
+		printf("%s\n",string);
+		printf("  *--*  *--*  *--*  *--*  *--*  *--*  *--*  *--*\n");
+	}
+
+	char string1[56];
+	char string2[56];
+	char string3[56];
+	char string4[56];
+	strcpy(string1,"");
+	strcpy(string2,"");
+	strcpy(string3,"");
+	strcpy(string4,"");
+	
+	if (aux != NULL){
+		while (aux != NULL) {
+			strcat(string1,"  .--.");
+			if (aux->carte.type==1){
+				sprintf(stringtemp, "  |0%d|",aux->carte.valeur);
+			} else if (aux->carte.type==2){
+				sprintf(stringtemp, "  |+2|");
+			} else if (aux->carte.type==3){
+				sprintf(stringtemp, "  |<>|");
+			} else if (aux->carte.type==4){
+				sprintf(stringtemp, "  |=>|");
+			} else if (aux->carte.type==5){
+				sprintf(stringtemp, "  |**|");
+			} else if (aux->carte.type==6){
+				sprintf(stringtemp, "  |+4|");
+			} else {
+				sprintf(stringtemp, "  |00|");
+			}
+			strcat(string2,stringtemp);
+			if (strcmp(aux->carte.couleur,"Ro")==0){
+				strcat(string3,"  |Ro|");
+			} else if (strcmp(aux->carte.couleur,"Bl")==0){
+				 strcat(string3,"  |Bl|");
+			} else if (strcmp(aux->carte.couleur,"Ve")==0){
+				strcat(string3,"  |Ve|");
+			} else if (strcmp(aux->carte.couleur,"Ja")==0){
+				strcat(string3,"  |Ja|");
+			} else {
+				strcat(string3,"  |##|");
+			}
+			strcat(string4,"  *--*");
+			aux=aux->suivant;
+		}
+		printf("%s\n",string1);
+		printf("%s\n",string2);
+		printf("%s\n",string3);
+		printf("%s\n\n",string4);
+	}
+}
+
+void afficherSuperListePioche(){
+	TCelluleCarte* aux = pioche;
+	int tailleFile = 0;
+	int nbLignes = 0;
+	
+	while (aux != NULL) {
+		tailleFile += 1;
+		aux=aux->suivant;
+	}
+
+	nbLignes = tailleFile/8;
+
+	int i=0;
+	int y=0;
+	char string[56];
+	char stringtemp[7];
+	strcpy(string,"");
+	strcpy(stringtemp,"");
+
+	
+	for (i=0;i<nbLignes;i++){
+		
+		strcpy(string,"");
+		aux = pioche;
+		for (y=0;y<i*8;y++){
+			aux=aux->suivant;
+		}
+		
+		printf("  .--.  .--.  .--.  .--.  .--.  .--.  .--.  .--.\n");
+		for (y=0;y<8;y++){
+			if (aux->carte.type==1){
+				sprintf(stringtemp, "  |0%d|",aux->carte.valeur);
+			} else if (aux->carte.type==2){
+				sprintf(stringtemp, "  |+2|");
+			} else if (aux->carte.type==3){
+				sprintf(stringtemp, "  |<>|");
+			} else if (aux->carte.type==4){
+				sprintf(stringtemp, "  |=>|");
+			} else if (aux->carte.type==5){
+				sprintf(stringtemp, "  |**|");
+			} else if (aux->carte.type==6){
+				sprintf(stringtemp, "  |+4|");
+			} else {
+				sprintf(stringtemp, "  |00|");
+			}
+			strcat(string,stringtemp);
+			aux = aux->suivant;
+		}
+		printf("%s\n",string);
+	
+		strcpy(string,"");
+		aux = pioche;
 		for (y=1;y<i*8+1;y++){
 			aux=aux->suivant;
 		}
