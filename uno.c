@@ -132,10 +132,12 @@ int main()
 			}
 			initialiserJeu();
 			melangerPioche();
+			afficherListe(pioche);
 			tirerCarte();
 			pioche7(&j1);
 			pioche7(&j2);
 			pioche7(&j3);
+			afficherListe(j2.jmain);
 			while (finManche == 0) {
 				if (pioche == NULL) {
 					printf("----------------------------------------------------------------\n");
@@ -320,9 +322,9 @@ void jouerTour(TJoueur* joueur){
 	}
 
 	while (choixOk == 0) {
-		printf(" \n Choisissez une carte en indiquant son numéro\n");
-		printf("  (de gauche à droite en partant de 1)\n");
-		printf("  0 pour piocher.");
+		printf("\nChoisissez une carte en indiquant son numéro\n");
+		printf("(de gauche à droite en partant de 1)\n");
+		printf("0 pour piocher : ");
 
 		// Le joueur saisit la carte à jouer :
 		choixCarte = saisirEntre(0,choixMax);
@@ -367,7 +369,7 @@ void jouerTour(TJoueur* joueur){
 						jeu = aux;
 					}
 					choixOk = 1;
-					printf("  C'est un +2 !\n");
+					printf(" C'est un +2 !\n");
 					piocherCarte(joueur->jsuivant);
 					piocherCarte(joueur->jsuivant);
 				}
@@ -417,7 +419,7 @@ void jouerTour(TJoueur* joueur){
 					jeu = aux;
 				}
 				choixOk = 1;
-				printf("  C'est un +4 !\n");
+				printf(" C'est un +4 !\n");
 				piocherCarte(joueur->jsuivant);
 				piocherCarte(joueur->jsuivant);
 				piocherCarte(joueur->jsuivant);
@@ -434,12 +436,12 @@ void jouerTour(TJoueur* joueur){
 					jeu = aux;
 				}
 				choixOk = 1;
-				printf("  C'est un JOKER !\n");
-				printf("  Veuillez choisir une couleur : \n");
-				printf("  1 - Rouge\n");
-				printf("  2 - Vert\n");
-				printf("  3 - Bleu\n");
-				printf("  4 - Jaune\n");
+				printf(" C'est un JOKER !\n");
+				printf(" Veuillez choisir une couleur : \n");
+				printf(" 1 - Rouge\n");
+				printf(" 2 - Vert\n");
+				printf(" 3 - Bleu\n");
+				printf(" 4 - Jaune\n");
 				choixCouleur = saisirEntre(1,4);
 				if (choixCouleur == 1){
 					strcpy(couleur,"Ro");
@@ -467,10 +469,10 @@ void jouerTour(TJoueur* joueur){
 						jeu = aux;
 					}
 					choixOk = 1;
-					printf("  C'est un Zero !\n");
-					printf("  Vous pouvez échanger votre main, choisissez avec qui :\n");
-					printf("  1 - %s",joueur->jsuivant->nom);
-					printf("  2 - %s",joueur->jsuivant->jsuivant->nom);
+					printf(" C'est un Zero !\n");
+					printf(" Vous pouvez échanger votre main, choisissez avec qui :\n");
+					printf(" 1 - %s",joueur->jsuivant->nom);
+					printf(" 2 - %s",joueur->jsuivant->jsuivant->nom);
 					choixCouleur = saisirEntre(1,2);
 					if (choixCouleur==1) {
 						aux = joueur->jmain;
@@ -485,10 +487,13 @@ void jouerTour(TJoueur* joueur){
 			}
 		}
 		if (choixOk==1){
-			printf("  Vous avez joué !\n");
+			printf(" Vous avez joué !\n");
 			printf("----------------------------------------------------------------\n");
 		} else {
-			printf("  La carte choisie n'est pas jouable !");
+			printf("----------------------------------------------------------------\n");
+			printf(" La carte choisie n'est pas jouable !");
+			printf("----------------------------------------------------------------\n");
+
 		}
 	}
 }
